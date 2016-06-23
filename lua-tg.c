@@ -704,6 +704,7 @@ enum lua_query_type {
   lq_chat_info,
   lq_user_info,
   lq_history,
+  lq_bot_info,
   lq_chat_add_user,
   lq_chat_del_user,
   lq_add_contact,
@@ -1327,6 +1328,10 @@ void lua_do_all (void) {
       tgl_do_get_user_info (TLS, lua_ptr[p + 1].peer_id, 0, lua_user_cb, lua_ptr[p].ptr);
       p += 2;
       break;
+	  case lq_bot_info:
+      tgl_do_get_user_info (TLS, TLS->our_id, 0, lua_user_cb, lua_ptr[p].ptr);
+      p += 1;
+      break;
     case lq_history:
       tgl_do_get_history (TLS, lua_ptr[p + 1].peer_id, 0, lua_ptr[p + 2].num, 0, lua_msg_list_cb, lua_ptr[p].ptr);
       p += 3;
@@ -1589,6 +1594,7 @@ struct lua_function functions[] = {
   {"chat_info", lq_chat_info, { lfp_chat, lfp_none }},
   {"channel_info", lq_channel_info, { lfp_channel, lfp_none }},
   {"user_info", lq_user_info, { lfp_user, lfp_none }},
+  {"bot_info", lq_bot_info, { lfp_none }},
   {"get_history", lq_history, { lfp_peer, lfp_nonnegative_number, lfp_none }},
   {"chat_add_user", lq_chat_add_user, { lfp_chat, lfp_user, lfp_none }},
   {"chat_del_user", lq_chat_del_user, { lfp_chat, lfp_user, lfp_none }},
